@@ -6,12 +6,17 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 
-import alertRoutes from './routes/alert.routes';
-import machineRoutes from './routes/machine.routes';
-import predictRoutes from './routes/predict.routes';
-import dashboardRoutes from './routes/dashboard.routes';
+// Import shared middlewares
+import { loggingMiddleware } from './shared/middlewares/logging.middleware';
+import { errorMiddleware } from './shared/middlewares/error.middleware';
 
-// ✅ Keep dua-duanya karena fitur baru
+// Import modular refactored routes
+import machineRoutes from './modules/machine/machine.routes';
+import predictRoutes from './modules/prediction/prediction.routes';
+import dashboardRoutes from './modules/dashboard/dashboard.routes';
+
+// Import legacy routes (until refactored)
+import alertRoutes from './routes/alert.routes';
 import simulationRoutes from './routes/simulation.routes';
 import chatRoutes from './routes/chat.routes';
 
@@ -22,15 +27,22 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
 app.use(cors());
 app.use(express.json());
 
+// 1. Global Request Logging Middleware
+app.use(loggingMiddleware);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/api/alerts', alertRoutes);
+// 2. Register Refactored Modular Routes
 app.use('/api/machines', machineRoutes);
 app.use('/api/predict', predictRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
-// ✅ Pasang dua-duanya
+// 3. Register Legacy Routes
+app.use('/api/alerts', alertRoutes);
 app.use('/api/simulation', simulationRoutes);
 app.use('/api/chat', chatRoutes);
+
+// 4. Global Error Handling Middleware (must be registered last)
+app.use(errorMiddleware);
 
 export default app;
