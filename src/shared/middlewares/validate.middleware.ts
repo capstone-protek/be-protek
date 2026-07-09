@@ -11,10 +11,17 @@ export const validate = (schema: z.ZodTypeAny) => {
         params: req.params,
       })) as any;
       
-      // Assign back the transformed/validated data
-      req.body = parsed.body;
-      req.query = parsed.query;
-      req.params = parsed.params;
+      // Assign back the transformed/validated data safely using Object.assign
+      // to avoid modifying read-only getters (req.query / req.params) directly.
+      if (parsed.body !== undefined) {
+        req.body = parsed.body;
+      }
+      if (parsed.query !== undefined) {
+        Object.assign(req.query, parsed.query);
+      }
+      if (parsed.params !== undefined) {
+        Object.assign(req.params, parsed.params);
+      }
       
       return next();
     } catch (error) {
