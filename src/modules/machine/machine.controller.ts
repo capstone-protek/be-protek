@@ -18,7 +18,9 @@ export class MachineController {
       if (!id) {
         throw new ValidationError('Machine ID is required');
       }
-      const machine = await machineService.getMachineDetail(id);
+      // Narrow type to string in case req.params yields string[] under newer Express typings
+      const idStr = Array.isArray(id) ? id[0] : id;
+      const machine = await machineService.getMachineDetail(idStr);
       return res.status(200).json(machine);
     } catch (error) {
       return next(error);
@@ -31,7 +33,9 @@ export class MachineController {
       if (!id) {
         throw new ValidationError('Machine ID is required');
       }
-      const history = await machineService.getMachineHistory(id);
+      // Narrow type to string in case req.params yields string[] under newer Express typings
+      const idStr = Array.isArray(id) ? id[0] : id;
+      const history = await machineService.getMachineHistory(idStr);
       return res.status(200).json(history);
     } catch (error) {
       return next(error);
