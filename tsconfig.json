@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    // === File Layout ===
+    "rootDir": "./src",             // Folder tempat file .ts kamu berada
+    "outDir": "./dist",             // Folder hasil compile .js
+
+    // === Environment Settings ===
+    "module": "CommonJS",           // Format modul Node.js (WAJIB untuk Express)
+    "target": "ESNext",             // Gunakan fitur JS modern
+    "moduleResolution": "node",     // Cara TS mencari module seperti Node.js
+    "esModuleInterop": true,        // Agar bisa import library lama (require -> import)
+    "lib": ["ES2020"],              // Dukungan untuk fitur modern JS
+    "types": ["node"],              // Supaya TS tahu tipe-tipe bawaan Node.js
+
+    // === Output Options ===
+    "sourceMap": true,              // Hasilkan peta sumber untuk debugging
+    "declaration": true,            // Hasilkan file .d.ts untuk tipe data
+    "declarationMap": true,         // Peta sumber untuk file deklarasi
+
+    // === Type Checking ===
+    "strict": true,                 // Aktifkan semua pemeriksaan ketat
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true, // Hindari beda huruf besar/kecil di import
+
+    // === Style Options (bisa aktifkan nanti jika perlu) ===
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // === Recommended Options ===
+    // "jsx": "react-jsx",
+    // "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": ["src",],               // Folder yang akan dikompilasi
+  "exclude": ["node_modules"]       // Folder yang tidak perlu dikompilasi
+}
