@@ -14,10 +14,10 @@ import { errorMiddleware } from './shared/middlewares/error.middleware';
 import machineRoutes from './modules/machine/machine.routes';
 import predictRoutes from './modules/prediction/prediction.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.routes';
+import alertRoutes from './modules/alert/alert.routes';
+import simulationRoutes from './modules/simulation/simulation.routes';
 
 // Import legacy routes (until refactored)
-import alertRoutes from './routes/alert.routes';
-import simulationRoutes from './routes/simulation.routes';
 import chatRoutes from './routes/chat.routes';
 
 const app = express();
@@ -36,10 +36,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/machines', machineRoutes);
 app.use('/api/predict', predictRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/simulation', simulationRoutes);
+
+// Register Alert routes with dashboard aliases to fix Postman 404 errors
+app.use('/api/alerts', alertRoutes);
+app.use('/api/dashboard/alerts', alertRoutes);
+app.use('/api/dashboard/alert', alertRoutes);
 
 // 3. Register Legacy Routes
-app.use('/api/alerts', alertRoutes);
-app.use('/api/simulation', simulationRoutes);
 app.use('/api/chat', chatRoutes);
 
 // 4. Global Error Handling Middleware (must be registered last)
