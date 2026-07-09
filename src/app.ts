@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 
-import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
 
@@ -28,9 +27,38 @@ app.use(express.json());
 // 1. Global Request Logging Middleware
 app.use(loggingMiddleware);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// 2. Serve Swagger Spec JSON for Scalar to consume
+app.get('/api-docs/json', (req, res) => {
+  res.status(200).json(swaggerDocument);
+});
 
-// 2. Register Refactored Modular Routes
+// 3. Serve Scalar API Reference UI
+app.get('/api-docs', (req, res) => {
+  res.status(200).send(`
+    <!doctype html>
+    <html>
+      <head>
+        <title>Predictive Maintenance Copilot - API Reference</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+          body {
+            margin: 0;
+          }
+        </style>
+      </head>
+      <body>
+        <script
+          id="api-reference"
+          data-url="/api-docs/json"
+          data-theme="purple"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+      </body>
+    </html>
+  `);
+});
+
+// 4. Register Refactored Modular Routes
 app.use('/api/machines', machineRoutes);
 app.use('/api/predict', predictRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -42,7 +70,7 @@ app.use('/api/alerts', alertRoutes);
 app.use('/api/dashboard/alerts', alertRoutes);
 app.use('/api/dashboard/alert', alertRoutes);
 
-// 3. Global Error Handling Middleware (must be registered last)
+// 5. Global Error Handling Middleware (must be registered last)
 app.use(errorMiddleware);
 
 export default app;
