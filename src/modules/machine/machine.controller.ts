@@ -18,8 +18,8 @@ export class MachineController {
       if (!id) {
         throw new ValidationError('Machine ID is required');
       }
-      // Narrow type to string in case req.params yields string[] under newer Express typings
-      const idStr = Array.isArray(id) ? id[0] : id;
+      // Narrow type and explicitly cast to string since runtime check validates it is defined
+      const idStr = (Array.isArray(id) ? id[0] : id) as string;
       const machine = await machineService.getMachineDetail(idStr);
       return res.status(200).json(machine);
     } catch (error) {
@@ -33,8 +33,8 @@ export class MachineController {
       if (!id) {
         throw new ValidationError('Machine ID is required');
       }
-      // Narrow type to string in case req.params yields string[] under newer Express typings
-      const idStr = Array.isArray(id) ? id[0] : id;
+      // Narrow type and explicitly cast to string since runtime check validates it is defined
+      const idStr = (Array.isArray(id) ? id[0] : id) as string;
       const history = await machineService.getMachineHistory(idStr);
       return res.status(200).json(history);
     } catch (error) {
