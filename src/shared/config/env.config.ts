@@ -6,9 +6,9 @@ const envSchema = z.object({
   ML_API_URL: z.string().default('http://localhost:8000'),
   PORT: z.preprocess((val) => (val ? Number(val) : 4000), z.number()).default(4000),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  BIZNETGIO_ENDPOINT: z.string().optional(),
-  BIZNETGIO_API_KEY: z.string().optional(),
-  BIZNETGIO_MODEL_NAME: z.string().optional(),
+  CHATGPT_ENDPOINT: z.string().default('https://api.openai.com/v1/chat/completions'),
+  CHATGPT_API_KEY: z.string().optional(),
+  CHATGPT_MODEL_NAME: z.string().default('gpt-4o-mini'),
 });
 
 const parseEnv = () => {
